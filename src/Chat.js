@@ -17,19 +17,17 @@ import { useAuth0 } from "./auth0";
 import axios from "axios";
 
 const apiKey = "bh38zhcjjpw5";
-//const chatClient = StreamChat.getInstance(apiKey);
 const sort = { last_message_at: -1 };
 
 function ChatView() {
   const [chatClient, setChatClient] = useState(null);
-  //const [channel, setChannel] = useState(null);
-  //const [loading, setLoading] = useState(false);
-  const { user, logout } = useAuth0();
+  const { user } = useAuth0();
 
   const userEmail = user.email.replace(/([^a-z0-9_-]+)/gi, "_");
-  const userId = userEmail + "_" + user.sub.slice(6,12);
+  const userId = userEmail + "_" + user.sub.slice(6, 12);
 
-  const filters = { type: 'messaging', members: { $in: [userId] } };
+  //const filters = { type: "messaging", members: { $in: [userId] } };
+  const filters = { type: "messaging" };
 
   useEffect(() => {
     axios
@@ -45,77 +43,47 @@ function ChatView() {
             const client = StreamChat.getInstance(apiKey);
 
             await client.connectUser(
-                {
-                    id: userId,
-                    name: userEmail,
-                    image:
-                      "https://getstream.io/random_png/?id=polished-brook-8&name=polished-brook-8",
-                },
-                userToken
+              {
+                id: userId,
+                name: userEmail,
+                image:
+                  "https://getstream.io/random_png/?id=polished-brook-8&name=polished-brook-8",
+              },
+              userToken
             );
+
             setChatClient(client);
           };
 
           initChat();
-
-          /*
-          chatClient.connectUser(
-            {
-              id: userId,
-              name: userEmail,
-              image:
-                "https://getstream.io/random_png/?id=polished-brook-8&name=polished-brook-8",
-            },
-            userToken
-          );
-
-          const channel = chatClient.channel(
-            "messaging",
-            "custom_channel_id",
-            {
-              // add as many custom fields as you'd like
-              image: "https://www.drupal.org/files/project-images/react.png",
-              name: "Talk about React",
-              members: [user_id],
-            },
-          );
-
-          setChannel(channel);
-          setLoading(false);
-          */
         },
         (error) => {
           console.log(error);
         }
       );
-  }, []);
+  }, [userEmail, userId]);
 
- //if (loading || !user) {
- //   return <LoadingIndicator />;
- // }
-
- if (!chatClient) {
+  if (!chatClient) {
     return <LoadingIndicator />;
- }
+  }
 
-  if (!user.email_verified) {
+  if (user.email_verified) {
     return (
-        <Chat client={chatClient} theme='messaging light'>
-          <ChannelList filters={filters} sort={sort} />
-          <Channel>
-            <Window>
-              <ChannelHeader />
-              <MessageList />
-              <MessageInput />
-            </Window>
-            <Thread />
-          </Channel>
-        </Chat>
+      <Chat client={chatClient} theme="messaging light">
+        <ChannelList filters={filters} sort={sort} />
+        <Channel>
+          <Window>
+            <ChannelHeader />
+            <MessageList />
+            <MessageInput />
+          </Window>
+          <Thread />
+        </Channel>
+      </Chat>
     );
   }
 
-  return <div>User not verified.</div>
-  
+  return <div>User not verified.</div>;
 }
 
 export default ChatView;

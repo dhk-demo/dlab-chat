@@ -7,10 +7,13 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Auth0Provider } from './auth0';
 
+const domainUrl = process.env.REACT_APP_AUTH0_DOMAIN;
+const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
+
 ReactDOM.render(
     <Auth0Provider
-        domain={'0xdev.us.auth0.com'}
-        client_id={'ZVpIx1a3Xz1BuRcz4cZGYvsoZY22TGVp'}
+        domain={ domainUrl } // '0xdev.us.auth0.com'
+        client_id={ clientId } //'ZVpIx1a3Xz1BuRcz4cZGYvsoZY22TGVp'
         redirect_uri={window.location.origin}
     >
     <App />

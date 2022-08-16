@@ -1,13 +1,13 @@
 {
     "name": "stream-chat-server",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "description": "server to return Stream user token",
+    "main": "server.js",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
-    "author": "",
+    "author": "constantiux",
     "license": "ISC",
     "dependencies": {
       "body-parser": "^1.20.0",

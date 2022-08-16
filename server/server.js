@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded(
     extended: true
 }));
 
-const apiPort = process.env.API_PORT;
+const apiPort = process.env.API_PORT || 5000;
 const apiKey = process.env.STREAM_API_KEY;
 const apiSecret = process.env.STREAM_APP_SECRET;
 
@@ -27,8 +27,20 @@ const serverClient = StreamChat.getInstance(apiKey, apiSecret);
 const defaultChannel = serverClient.channel('messaging', 'talk_about_anything', {
     // add as many custom fields as you'd like
     image: 'https://www.drupal.org/files/project-images/react.png',
-    name: 'Talk about Anything'
+    name: 'Talk about Anything',
+    created_by_id: 'cajenizod_robot-mail_com_62f50b'
 });
+
+async function createDefaultChannel() {
+    try {
+        await defaultChannel.create();
+        console.log("Default channel created.")
+    }
+    catch (error) {
+        console.error(`Details: ${error}`);
+    }
+}
+createDefaultChannel();
 
 app.post('/token', (req, res) =>
 {
@@ -61,6 +73,9 @@ app.post('/token', (req, res) =>
     });
 })
 
+app.get('/', (req, res) => {
+    res.send("Hello world!")
+})
 
 app.listen(apiPort, () =>
 {
